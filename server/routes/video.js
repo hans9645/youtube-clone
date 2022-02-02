@@ -49,6 +49,15 @@ router.post("/uploadfiles", (req, res) => {
   });
 });
 
+router.post("/getVideoDetail", (req, res) => {
+  Video.findOne({ _id: req.body.videoId })
+    .populate("writer")
+    .exec((err, VideoDetail) => {
+      if (err) return res.status(400).send(err);
+      return res.status(200).json({ success: true, VideoDetail });
+    });
+});
+
 router.post("/thumbnail", (req, res) => {
   //썸네일 생성하고 비디오 러닝타임같은 듀레이션도 가져오기.
   let filePath = "";
