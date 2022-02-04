@@ -15,7 +15,7 @@ router.post("/subscribeNumber", (req, res) => {
   });
 });
 
-router.post("/subscribeCheck;", (req, res) => {
+router.post("/subscribeCheck", (req, res) => {
   Subscriber.find({
     userTo: req.body.userTo,
     userFrom: req.body.userFrom,
@@ -26,6 +26,25 @@ router.post("/subscribeCheck;", (req, res) => {
       check = true;
     }
     return res.status(200).json({ success: true, subscribeCheck: check });
+  });
+});
+
+router.post("/subscribe", (req, res) => {
+  const subscriber = new Subscriber(req.body);
+
+  subscriber.save((err, doc) => {
+    if (err) return res.json({ success: false, err });
+    res.status(200).json({ success: true });
+  });
+});
+
+router.post("/unsubscribe", (req, res) => {
+  Subscriber.findOneAndDelete({
+    userTo: req.body.userTo,
+    userFrom: req.body.userFrom,
+  }).exec((err, doc) => {
+    if (err) return res.status(400).send(err);
+    return res.status(200).json({ success: true, doc });
   });
 });
 

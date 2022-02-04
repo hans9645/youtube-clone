@@ -9,7 +9,7 @@ function Subscribe(props) {
     let variable = { userTo: props.userTo };
     Axios.post("/api/subscribe/subscribeNumber", variable).then((response) => {
       if (response.data.success) {
-        console.log(response.data.SubscribeNumber);
+        console.log(response.data.subscribeNumber);
         setSubscribeNumber(response.data.subscribeNumber);
       } else {
         alert("subscriber number를 읽는데 실패했습니다.");
@@ -24,13 +24,44 @@ function Subscribe(props) {
     Axios.post("/api/subscribe/subscribeCheck", subscribeCheckVariable).then(
       (response) => {
         if (response.data.success) {
-          setSubscribeCheck(response.data.SubscribeCheck);
+          setSubscribeCheck(response.data.subscribeCheck);
         } else {
           alert("구독정보 파악에 실패했습니다.");
         }
       }
     );
   }, []);
+
+  const onSubscribe = () => {
+    console.log("작동 중");
+    let subscribeVariable = {
+      userTo: props.userTo,
+      userFrom: localStorage.getItem("userId"),
+    };
+    if (SubscribeCheck) {
+      Axios.post("/api/subscribe/unsubscribe", subscribeVariable).then(
+        (response) => {
+          if (response.data.success) {
+            setSubscribeCheck(!SubscribeCheck);
+            setSubscribeNumber(SubscribeNumber - 1);
+          } else {
+            alert("구독 취소하는데 실패했습니다.");
+          }
+        }
+      );
+    } else {
+      Axios.post("/api/subscribe/subscribe", subscribeVariable).then(
+        (response) => {
+          if (response.data.success) {
+            setSubscribeCheck(!SubscribeCheck);
+            setSubscribeNumber(SubscribeNumber + 1);
+          } else {
+            alert("구독하는데 실패했습니다.");
+          }
+        }
+      );
+    }
+  };
 
   return (
     <div>
@@ -44,7 +75,7 @@ function Subscribe(props) {
           fontSize: "1rem",
           textTransform: "uppercase",
         }}
-        onClick
+        onClick={onSubscribe}
       >
         {SubscribeNumber} {SubscribeCheck ? "Subscribed" : "Subscribe"}
       </button>

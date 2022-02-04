@@ -43,7 +43,7 @@ function VideoDetailPage(props) {
             </div>
           </div>
 
-          <List.Item actions={[<Subscribe userTo={VideoDetail.writer_id} />]}>
+          <List.Item actions={[<Subscribe userTo={VideoDetail.writer._id} />]}>
             <List.Item.Meta
               avatar={<Avatar src={VideoDetail.writer.image} />}
               title={VideoDetail.writer.name}
