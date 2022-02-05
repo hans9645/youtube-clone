@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { User } = require("../models/User");
 const { Video } = require("../models/Video");
+const { Subscriber } = require("../models/Subscriber");
 const multer = require("multer");
 //const { auth } = require("../middleware/auth");
 const ffmpeg = require("fluent-ffmpeg");
@@ -120,6 +121,27 @@ router.get("/getVideos", (req, res) => {
       if (err) return res.status(400).send(err);
       res.status(200).json({ success: true, videos });
     });
+});
+
+router.post("/getSubscriptVideos", (req, res) => {
+  //비디오를 DB에서 가져와서 클라이언트에 보낸다.
+
+  Subscriber.find({ userFrom: req.body.userFrom }).exec(
+    (err, subscribeInfo) => {
+      let subscriptedUser = [];
+      if (err) return res.status(400).send(err);
+      subscribeInfo.map((subscriber, index) => {
+        subscriptedUser.push(subscriber.userTo);
+      });
+
+      Video.find({ writer: { $in: subscriptedUser } })
+        .populate("writer")
+        .exec((err, videos) => {
+          if (err) return res.status(400).send(err);
+          res.status(200).json({ success: true, videos });
+        });
+    }
+  );
 });
 
 module.exports = router;

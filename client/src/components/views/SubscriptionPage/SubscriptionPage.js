@@ -11,13 +11,13 @@ function SubscriptionPage() {
 
   useEffect(() => {
     let subscriptionVariable = { userFrom: localStorage.getItem("userId") };
-    Axios.post("/api/video/getVideos", subscriptionVariable).then(
+    Axios.post("/api/video/getSubscriptVideos", subscriptionVariable).then(
       (response) => {
         if (response.data.success) {
           console.log(response.data);
           setVideo(response.data.videos);
         } else {
-          alert("비디오 가져오기를 실패함.");
+          alert("구독 비디오 가져오기를 실패함.");
         }
       }
     );
@@ -59,7 +59,7 @@ function SubscriptionPage() {
 
   return (
     <div style={{ width: "85%", margin: "3rem auto" }}>
-      <Title level={2}>Recommended</Title>
+      <Title level={2}>Subscripted</Title>
       <hr />
       <Row gutter={[32, 16]}>{renderCards}</Row>
     </div>
