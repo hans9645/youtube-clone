@@ -3,6 +3,7 @@ import { Row, Col, List, Avatar } from "antd";
 import Axios from "axios";
 import SideVideo from "./Sections/SideVideo";
 import Subscribe from "./Sections/Subscribe";
+import Comment from "./Sections/Comment";
 
 function VideoDetailPage(props) {
   const videoId = props.match.params.videoId;
@@ -29,31 +30,21 @@ function VideoDetailPage(props) {
       <Row gutter={[16, 16]}>
         <Col lg={18} xs={24}>
           <div style={{ width: "100%", padding: "3rem 4rem" }}>
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                height: "660px",
-                backgroundColor: "#24292e",
-                justifyContent: "center",
-                padding: "3rem 4rem",
-              }}
-            >
-              <video
-                style={{ maxHeight: "100%", maxWidth: "100%" }}
-                src={`http://localhost:5000/${VideoDetail.filePath}`}
-                controls
-              />
-            </div>
-          </div>
+            <video
+              style={{ maxHeight: "100%", maxWidth: "100%" }}
+              src={`http://localhost:5000/${VideoDetail.filePath}`}
+              controls
+            />
+            <List.Item actions={[subscribeButton]}>
+              <List.Item.Meta
+                avatar={<Avatar src={VideoDetail.writer.image} />}
+                title={VideoDetail.writer.name}
+                description={VideoDetail.description}
+              ></List.Item.Meta>
+            </List.Item>
 
-          <List.Item actions={[subscribeButton]}>
-            <List.Item.Meta
-              avatar={<Avatar src={VideoDetail.writer.image} />}
-              title={VideoDetail.writer.name}
-              description={VideoDetail.description}
-            ></List.Item.Meta>
-          </List.Item>
+            <Comment videoId={videoId} />
+          </div>
         </Col>
         <Col lg={6} xs={24}>
           <SideVideo />
