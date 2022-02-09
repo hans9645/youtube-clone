@@ -24,7 +24,7 @@ function VideoDetailPage(props) {
     Axios.post("/api/comment/getComments", variable).then((response) => {
       if (response.data.success) {
         setComments(response.data.comments);
-        console.log(response.data.comments);
+        console.log(Comments);
       } else {
         alert("코멘트 정보를 가져오는데 실패했습니다.");
       }
@@ -49,6 +49,7 @@ function VideoDetailPage(props) {
               src={`http://localhost:5000/${VideoDetail.filePath}`}
               controls
             />
+
             <List.Item actions={[subscribeButton]}>
               <List.Item.Meta
                 avatar={<Avatar src={VideoDetail.writer.image} />}
