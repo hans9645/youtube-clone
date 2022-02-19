@@ -30,4 +30,19 @@ router.post("/getComments", (req, res) => {
     });
 });
 
+router.post("/deleteComment", (req, res) => {
+  Comment.findOneAndUpdate(
+    { _id: req.body.commentId },
+    { $set: { delete: 1 } }
+  ).exec((err, docs) => {
+    if (err) return res.status(400).send(err);
+    res.status(200).json({ success: true, docs });
+  });
+
+  //   Comment.deleteOne({ _id: req.body.commentId }).exec((err, docs) => {
+  //     if (err) return res.status(400).send(err);
+  //     res.status(200).json({ success: true, docs });
+  //   });
+});
+
 module.exports = router;

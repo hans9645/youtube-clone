@@ -22,12 +22,14 @@ function ReplyComment(props) {
           <div style={{ width: "80%", marginLeft: "40px" }}>
             <SingleComment
               refreshFunction={props.refreshFunction}
+              deleteFunction={props.deleteFunction}
               key={index}
               comment={comment}
               videoId={props.videoId}
             />
             <ReplyComment
               refreshFunction={props.refreshFunction}
+              deleteFunction={props.deleteFunction}
               parentCommentId={comment._id}
               commentLists={props.commentLists}
               videoId={props.videoId}

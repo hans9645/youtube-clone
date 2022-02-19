@@ -44,12 +44,14 @@ function Comment(props) {
               <React.Fragment>
                 <SingleComment
                   refreshFunction={props.refreshFunction}
+                  deleteFunction={props.deleteFunction}
                   key={index}
                   comment={comment}
                   videoId={videoId}
                 />
                 <ReplyComment
                   refreshFunction={props.refreshFunction}
+                  deleteFunction={props.deleteFunction}
                   parentCommentId={comment._id}
                   commentLists={props.commentLists}
                   videoId={videoId}

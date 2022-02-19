@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Comment, Avatar, Button, Input } from "antd";
+import { Comment, Avatar, Button, Input, message } from "antd";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import LikeDislikes from "./LikeDislikes";
@@ -14,6 +14,24 @@ function SingleComment(props) {
   const onClickOpenReplyOpen = () => {
     setOpenReply(!OpenReply);
   };
+  const onClickDelete = () => {
+    const variables = {
+      commentId: props.comment._id,
+    };
+    if (user.userData._id !== props.comment.writer._id) {
+      return message.error("본인의 글이 아니므로 삭제할 수 없습니다.");
+    }
+    Axios.post("/api/comment/deleteComment", variables).then((response) => {
+      if (response.data.success) {
+        console.log(response.data.docs);
+        //props.refreshFunction(response.data.result);
+        message.success("성공적으로 댓글을 삭제하였습니다.");
+        props.deleteFunction(variables.commentId);
+      } else {
+        alert("커멘트를 삭제하지 못했습니다.");
+      }
+    });
+  };
 
   const actions = [
     <LikeDislikes
@@ -22,6 +40,9 @@ function SingleComment(props) {
     />,
     <span onClick={onClickOpenReplyOpen} key={"comment-basic-reply-to"}>
       Reply to
+    </span>,
+    <span onClick={onClickDelete} key={"comment-basic-reply-tod"}>
+      delete
     </span>,
   ];
   const onHandleChange = (event) => {
@@ -39,7 +60,6 @@ function SingleComment(props) {
 
     Axios.post("/api/comment/saveComment", variables).then((response) => {
       if (response.data.success) {
-        console.log(response.data.result);
         props.refreshFunction(response.data.result);
         setCommentValue("");
         setOpenReply(false);
@@ -50,13 +70,30 @@ function SingleComment(props) {
   };
   return (
     <div>
-      <Comment
-        actions={actions}
-        author={props.comment.writer.name}
-        avatar={<Avatar src={props.comment.writer.image} alt />}
-        content={<p>{props.comment.content}</p>}
-      />
-
+      {props.comment.delete !== 0 && (
+        <Comment
+          actions={[
+            <LikeDislikes
+              userId={localStorage.getItem("userId")}
+              commentId={props.comment._id}
+            />,
+            <span onClick={onClickOpenReplyOpen} key={"comment-basic-reply-to"}>
+              Reply to
+            </span>,
+          ]}
+          author={props.comment.writer.name}
+          avatar={<Avatar src={props.comment.writer.image} alt />}
+          content={<p>삭제된 댓글입니다.</p>}
+        />
+      )}
+      {props.comment.delete === 0 && (
+        <Comment
+          actions={actions}
+          author={props.comment.writer.name}
+          avatar={<Avatar src={props.comment.writer.image} alt />}
+          content={<p>{props.comment.content}</p>}
+        />
+      )}
       {OpenReply && (
         <form style={{ display: "flex" }} onSubmit={onSubmit}>
           <textarea

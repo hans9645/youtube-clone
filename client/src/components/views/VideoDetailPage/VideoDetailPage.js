@@ -38,6 +38,25 @@ function VideoDetailPage(props) {
     setComments(Comments.concat(newComment));
   };
 
+  const updateDeleteComment = (deletedCommentId) => {
+    //We can just refetch all of the revised comment datas from DB
+    //But it is better just to change some parts that has changed from delete function
+
+    let targetedCommentIndex;
+
+    let newCommentList = [...Comments];
+
+    Comments.map((comment, index) => {
+      if (comment._id === deletedCommentId) {
+        targetedCommentIndex = index;
+      }
+    });
+    newCommentList[targetedCommentIndex].delete = 1;
+    //newCommentList.splice(targetedCommentIndex, 1);
+
+    setComments(newCommentList);
+  };
+
   if (VideoDetail.writer) {
     const subscribeButton = VideoDetail.writer._id !==
       localStorage.getItem("userId") && (
@@ -79,6 +98,7 @@ function VideoDetailPage(props) {
 
             <Comment
               refreshFunction={refreshFunction}
+              deleteFunction={updateDeleteComment}
               commentLists={Comments}
               videoId={videoId}
             />

@@ -18,6 +18,10 @@ const commentSchema = mongoose.Schema(
     content: {
       type: String,
     },
+    delete: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true } //생성일자와 업데이트 일자가 자동표기가 됨.
 );
