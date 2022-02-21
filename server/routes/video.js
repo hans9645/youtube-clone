@@ -20,7 +20,11 @@ const storage = multer.diskStorage({
 const fileFilter = (req, file, cb) => {
   // mime type 체크하여 원하는 타입만 필터링
 
-  if (file.mimetype == "video/mp4") {
+  if (
+    file.mimetype == "video/mp4" ||
+    file.mimetype == "video/quicktime" ||
+    file.mimetype == "video/x-msvideo"
+  ) {
     cb(null, true);
   } else {
     cb({ msg: "mp4 파일만 업로드 가능합니다." }, false);
